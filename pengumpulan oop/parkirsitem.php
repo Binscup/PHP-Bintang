@@ -7,39 +7,111 @@
     <title>Document</title>
 </head>
 <body>
-    <?php
-    $Vehicle = "";
-    $Parking = '';
+    <p style="font-size: 30px;">Sistem demo karcis parkir</p>
+<?php
 
-    if ($_SEVER["REQUEST_METHOD"]=== "POST"){
-        $Vehicle = dataType($_POST['Vehicle']);
-        $Parking = dataType($_POST['Parking']);
-    }
-    function datatype($maxParking)
+class vehicle
+{
+    private $numberPolice;
+    private $type;
+
+    public function __construct($numberPolice, $type)
     {
-        $inputData = trim($maxParking);
-        $inputData = stripslashes($maxParking);
-        $inputData = htmlspecialchars($maxParking);
-        return $maxParking;
+        $this->numberPolice = $numberPolice;
+        $this->type = $type;
     }
-    ?>
-    <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>"method="post">
+
+    public function getNumberPolice()
+    {
+        return $this->numberPolice;
+    }
+
+    public function getType()
+    {
+        return $this->type;
+    }
+}
+
+class parking
+{
+    private $maxParking;
+    private $showVehicleParking;
+
+    public function __construct($maxParking)
+    {
+        $this->maxParking = $maxParking;
+        $this->showVehicleParking = array();
+    }
+
+    public function inParking(vehicle $vehicle)
+    {
+        if (count($this->showVehicleParking) < $this->maxParking) {
+            $this->showVehicleParking[] = $vehicle;
+            echo "Nomor polisi " . $vehicle->getNumberPolice() . " tipe kendaraan: " . $vehicle->getType();
+        } else {
+            echo "Area parkir sudah penuh, tunggu hingga kendaraan keluar";
+        }
+    }
+
+    public function areaParking()
+    {
+        foreach ($this->maxParking as $key => $parking) {
+            if ($parking->getNumberPolice === $parking) {
+                unset($this->showVehicleParking[$key]);
+                echo "Kendaraan berada pada area parkir";
+                return;
+            }
+        }
+    }
+
+    public function statusParking()
+    {
+        echo "Berikut status parkir:" . "<br>";
+        echo "Total jumlah parkir kendaraan: " . count($this->maxParking) . "<br>";
+        foreach ($this->showVehicleParking as $key => $showVehicle) {
+            echo "Nomor polisi " . $showVehicle->getNumberPolice() . " tipe kendaraan: " . $showVehicle->getType();
+            return;
+        }
+    }
+}
+if($_SERVER ["REQUEST_METHOD"]=== "POST" ){
+    $numberPolice = dataType($_POST['numberPolice']);
+    $parking = dataType($_POST['parking']);
+}
+    function dataType($dataparkir)
+    {
+        $inputData = trim($dataparkir);
+        $inputData = stripslashes($dataparkir);
+        $inputData = htmlspecialchars($dataparkir);
+        return $inputData;
+    }
+
+?>
+ <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']);?>" method="post">
+        <div style="margin-bottom: 3px;">
+        <label for="username">nama kendaraan</label>
+        <input type="text" id="username" name="numberPolice" placeholder="Masukan nama anda"/>
+    </div>
     <div style="margin-bottom: 3px;">
-        <label for="Vehicle">Nama kendaraan</label>
-        <input type="text" id="Vehicle" name="Nama kendaraan" placeholder="Masukan nomor kednaraan">
-</div>
+        <label for="username">plat nomor</label>
+        <input type="text" id="username" name="parking" placeholder="Masukan kelas anda"/>
+    </div>
     <div style="margin-bottom: 3px;">
-        <label for="plat">Masukan Plat nomor</label>
-        <input type="text" id="plat" name="Masukan plat nomor" placeholder="Masukan plat nomor">
-</div>
-<input type="submit" value="Simpan">
-</form>
-    <?php
-    echo "<br>";
-    echo "Nama kendaraan". $Vehicle;
-    echo "<br>";
-    echo "Nomor Plat". $Parking;
-     
+        <label for="username">nomor polisi</label>
+        <input type="text" id="username" name="numberPolice" placeholder="Masukan nama anda"/>
+    </div>
+    <div style="margin-bottom: 3px;">
+        <label for="username">total jumlah kendaraan</label>
+        <input type="number" id="username" name="parking" placeholder="Masukan kelas anda"/>
+    </div>
+    <input type="submit" value="Simpan">
+
+    </form>
+    <?php 
+    echo"<br>";
+    echo"tipe kendaraan". $numberPolice;
     ?>
+
+
 </body>
 </html>
